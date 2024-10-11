@@ -1,0 +1,12 @@
+sources:
+  - name: raw
+    description: Raw data from CSV files
+    database: postgres
+    schema: bronze
+
+    tables:
+      - name: RAW_NSW_LGA_CODE
+      - name: RAW_NSW_LGA_SUBURB
+      - name: RAW_AIRBNB_LISTINGS
+      - name: RAW_CENSUS_G01
+      - name: RAW_CENSUS_G02
