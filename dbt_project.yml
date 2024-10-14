@@ -28,7 +28,7 @@ models:
       star:
         +materialized: table
         +schema: gold
-      mart:
+      datamart:
         +materialized: view
         +schema: gold
 snapshots:
