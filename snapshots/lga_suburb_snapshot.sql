@@ -9,10 +9,7 @@
         )
     }}
 
-select
-    LGA_NAME as lga_name,
-    SUBURB_NAME as suburb_name
-    -- NOW() as updated_at
+select *
 from {{ ref('b_lga_suburb') }}
 
 {% endsnapshot %}

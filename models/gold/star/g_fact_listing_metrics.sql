@@ -1,15 +1,20 @@
 {{
     config(
-        unique_key='order_id',
-        alias='fact_orders'
+        unique_key='listing_id',
+        alias='fact_listing_metrics'
     )
 }}
 
 select
-	order_id,
-	date,
-	case when brand_id in (select distinct brand_id from {{ ref('g_dim_brand') }}) then brand_id else 0 end as brand_id,
-	case when category_id in (select distinct category_id from {{ ref('g_dim_category') }}) then category_id else 0 end as category_id,
-	case when sub_category_id in (select distinct sub_category_id from {{ ref('g_dim_sub_category') }}) then sub_category_id else 0 end as sub_category_id,
-	price
-from {{ ref('s_orders') }}
+	listing_id,
+	scraped_date,
+    price,
+	availability_30,
+    number_of_reviews,
+    review_scores_rating,
+    review_scores_accuracy,
+    review_scores_cleanliness,
+    review_scores_checkin,
+    review_scores_communication,
+    review_scores_value
+from {{ ref('s_airbnb') }}
