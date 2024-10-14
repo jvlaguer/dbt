@@ -18,6 +18,7 @@ listing_neighbourhood,
 property_type,
 room_type,
 accommodates,
+has_availability
 FROM {{ ref('b_airbnb') }}
 
 {% endsnapshot %}

@@ -5,4 +5,4 @@
     )
 }}
 
-select * from {{ source('raw', 'RAW_NSW_LGA_SUBURB') }}
+select * from {{ source('raw', 'raw_nsw_lga_suburb') }}

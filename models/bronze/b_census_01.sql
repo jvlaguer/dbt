@@ -5,4 +5,4 @@
     )
 }}
 
-select * from {{ source('raw', 'RAW_CENSUS_G01') }}
+select * from {{ source('raw', 'raw_census_g01') }}

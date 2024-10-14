@@ -1,6 +1,6 @@
 {{
     config(
-        unique_key='transaction_id',
+        unique_key='airbnb_id',
         alias='facts_airbnb'
     )
 }}
@@ -14,13 +14,13 @@ source  as (
 
 renamed as (
     select
-        transaction_id,
+        airbnb_id,
         listing_id,
         scrape_id,
-        to_date(scraped_date,'YY/MM/DD')  as scraped_date,
+        to_date(scraped_date,'YYYY-MM-DD')  as scraped_date,
         host_id,
         host_name,
-        to_date(host_since,'YY/MM/DD')  as host_since,
+        to_date(host_since,'D/M/YYYY')  as host_since,
         host_is_superhost,
         host_neighbourhood,
         listing_neighbourhood
