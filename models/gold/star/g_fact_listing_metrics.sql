@@ -7,6 +7,7 @@
 
 select
 	listing_id,
+    host_id,
 	scraped_date,
     price,
 	availability_30,

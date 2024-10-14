@@ -5,21 +5,21 @@
     )
 }}
 
-with
+WITH
 
-source  as (
+source  AS (
 
-    select * from {{ ref('lga_suburb_snapshot') }}
+    SELECT * FROM {{ ref('lga_suburb_snapshot') }}
 
 ),
 
 cleaned as (
-    select
-        suburb_name,
-        lga_name,
-        case when dbt_valid_from = (select min(dbt_valid_from) from source) then '1900-01-01'::timestamp else dbt_valid_from end as valid_from,
+    SELECT
+        LOWER(suburb_name),
+        LOWER(lga_name),
+        CASE WHEN dbt_valid_from = (SELECT MIN(dbt_valid_from) FROM source) THEN '1900-01-01'::timestamp ELSE dbt_valid_from END as valid_from,
         dbt_valid_to as valid_to
-    from source
+    FROM source
 ),
 
 unknown as (
@@ -30,6 +30,6 @@ unknown as (
         null::timestamp as valid_to
 
 )
-select * from unknown
-union all
-select * from cleaned
+SELECT * FROM unknown
+UNION ALL
+SELECT * FROM cleaned

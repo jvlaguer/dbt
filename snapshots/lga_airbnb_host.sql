@@ -9,7 +9,7 @@
         )
     }}
 
-SELECT
+SELECT DISTINCT
 scraped_date,
 host_id,
 host_name,

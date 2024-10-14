@@ -62,8 +62,8 @@ main as (
     COUNT(DISTINCT IF(h.host_is_superhost='t',fm.host_id,NULL))/COUNT(DISTINCT fm.host_id) as superhost_rate,
     AVG(IF(l.has_availability='t',fm.review_scores_rating,null)) as avg_active_listing_review_score_rating,
     SUM(30-fm.availability_30) as number_of_stays,
-    AVG(IF(l.has_availability='t',(30-fm.availability_30)*fm.price,NULL)) as est_rev_per_active_listing,
-    from {{ ref('g_fact_listing_metrics') }} fm
+    AVG(IF(l.has_availability='t',(30-fm.availability_30)*fm.price,NULL)) as est_rev_per_active_listing
+    FROM {{ ref('g_fact_listing_metrics') }} fm
     LEFT JOIN {{ ref('g_dim_airbnb_listing') }} l on fm.listing_id = l.listing_id and fm.scraped_date = l.scraped_date and fm.scraped_date::timestamp >= l.valid_from and fm.scraped_date::timestamp < coalesce(l.valid_to, '9999-12-31'::timestamp)
     LEFT JOIN {{ ref('g_dim_airbnb_host') }} h on fm.host_id = h.host_id and fm.scraped_date = h.scraped_date and fm.scraped_date::timestamp >= h.valid_from and fm.scraped_date::timestamp < coalesce(h.valid_to, '9999-12-31'::timestamp)
     group by 1,2
@@ -72,7 +72,7 @@ main as (
 
 SELECT 
 m.listing_neighbourhood,
-m.month_year
+m.month_year,
 m.active_listing_rate,
 m.min_active_listing_price,
 m.max_active_listing_price,
@@ -90,4 +90,4 @@ LEFT join table_active_pcnt_change_cnt_distinct_host a
 ON m.listing_neighbourhood = a.listing_neighbourhood AND m.month_year = a.month_year
 LEFT JOIN table_inactive_pcnt_change_cnt_distinct_host i
 ON m.listing_neighbourhood = i.listing_neighbourhood AND m.month_year = i.month_year
-ORDER BY listing_neighbourhood, month_year;
+ORDER BY listing_neighbourhood, month_year
