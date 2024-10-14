@@ -12,7 +12,6 @@
 SELECT
 listing_id,
 host_id,
-scrape_id,
 scraped_date,
 listing_neighbourhood,
 property_type,
