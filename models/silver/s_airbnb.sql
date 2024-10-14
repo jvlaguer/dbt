@@ -1,7 +1,7 @@
 {{
     config(
         unique_key='transaction_id',
-        alias='facts'
+        alias='facts_airbnb'
     )
 }}
 

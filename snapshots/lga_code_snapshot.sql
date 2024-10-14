@@ -9,10 +9,7 @@
         )
     }}
 
-select
-    LGA_CODE as lga_code,
-    LGA_NAME as lga_name,
-    NOW() as updated_at
+select *
 from {{ ref('b_lga_code') }}
 
 {% endsnapshot %}
