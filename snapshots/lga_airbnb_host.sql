@@ -10,7 +10,6 @@
     }}
 
 SELECT
-scrape_id,
 scraped_date,
 host_id,
 host_name,
