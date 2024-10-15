@@ -15,8 +15,8 @@ source  AS (
 
 cleaned as (
     SELECT
-        LOWER(suburb_name),
-        LOWER(lga_name),
+        suburb_name,
+        lga_name,
         CASE WHEN dbt_valid_from = (SELECT MIN(dbt_valid_from) FROM source) THEN '1900-01-01'::timestamp ELSE dbt_valid_from END as valid_from,
         dbt_valid_to as valid_to
     FROM source
