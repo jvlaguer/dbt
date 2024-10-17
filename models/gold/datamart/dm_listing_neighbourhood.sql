@@ -37,7 +37,7 @@ table_active_mom_cnt_distinct_host  AS (
 table_active_pcnt_change_cnt_distinct_host  as (
 
     SELECT *,
-    (cnt_listings/LAG(cnt_listings, 1) OVER (PARTITION BY listing_neighbourhood ORDER BY month_year::timestamp) - 1.0) * 100.0 as pcnt_change
+    (cnt_listings/LAG(cnt_listings, 1) OVER (PARTITION BY listing_neighbourhood ORDER BY SUBSTRING(month_year, 4, 4), SUBSTRING(month_year, 1, 2)) - 1.0) * 100.0 as pcnt_change
     from table_active_mom_cnt_distinct_host
 
 ),
@@ -57,7 +57,7 @@ table_inactive_mom_cnt_distinct_host  as (
 table_inactive_pcnt_change_cnt_distinct_host  as (
 
     SELECT *,
-    (cnt_listings/LAG(cnt_listings, 1) OVER (PARTITION BY listing_neighbourhood ORDER BY month_year::timestamp) - 1.0) * 100.0 as pcnt_change
+    (cnt_listings/LAG(cnt_listings, 1) OVER (PARTITION BY listing_neighbourhood ORDER BY SUBSTRING(month_year, 4, 4), SUBSTRING(month_year, 1, 2)) - 1.0) * 100.0 as pcnt_change
     from table_inactive_mom_cnt_distinct_host
 
 ),
@@ -101,4 +101,4 @@ LEFT join table_active_pcnt_change_cnt_distinct_host a
 ON m.listing_neighbourhood = a.listing_neighbourhood AND m.month_year = a.month_year
 LEFT JOIN table_inactive_pcnt_change_cnt_distinct_host i
 ON m.listing_neighbourhood = i.listing_neighbourhood AND m.month_year = i.month_year
-ORDER BY listing_neighbourhood, month_year
+ORDER BY m.listing_neighbourhood, SUBSTRING(m.month_year, 4, 4), SUBSTRING(m.month_year, 1, 2)

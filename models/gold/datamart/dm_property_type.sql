@@ -41,7 +41,7 @@ table_active_mom_cnt_distinct_host  as (
 table_active_pcnt_change_cnt_distinct_host  as (
 
     SELECT *,
-    (cnt_listings/LAG(cnt_listings, 1) OVER (PARTITION BY property_type, room_type, accommodates ORDER BY month_year::timestamp) - 1.0) * 100.0 as pcnt_change
+    (cnt_listings/LAG(cnt_listings, 1) OVER (PARTITION BY property_type, room_type, accommodates ORDER BY SUBSTRING(month_year, 4, 4), SUBSTRING(month_year, 1, 2)) - 1.0) * 100.0 as pcnt_change
     from table_active_mom_cnt_distinct_host
 
 ),
@@ -63,7 +63,7 @@ table_inactive_mom_cnt_distinct_host  as (
 table_inactive_pcnt_change_cnt_distinct_host  as (
 
     SELECT *,
-    (cnt_listings/LAG(cnt_listings, 1) OVER (PARTITION BY property_type, room_type, accommodates ORDER BY month_year::timestamp) - 1.0) * 100.0 as pcnt_change
+    (cnt_listings/LAG(cnt_listings, 1) OVER (PARTITION BY property_type, room_type, accommodates ORDER BY SUBSTRING(month_year, 4, 4), SUBSTRING(month_year, 1, 2)) - 1.0) * 100.0 as pcnt_change
     from table_inactive_mom_cnt_distinct_host
 
 ),
@@ -111,4 +111,4 @@ LEFT join table_active_pcnt_change_cnt_distinct_host a
 ON m.property_type = a.property_type AND m.room_type = a.room_type AND m.accommodates = a.accommodates AND m.month_year = a.month_year
 LEFT JOIN table_inactive_pcnt_change_cnt_distinct_host i
 ON m.property_type = i.property_type AND m.room_type = i.room_type AND m.accommodates = i.accommodates AND m.month_year = i.month_year
-ORDER BY m.property_type, m.room_type, m.accommodates, m.month_year
+ORDER BY m.property_type, m.room_type, m.accommodates, SUBSTRING(m.month_year, 4, 4), SUBSTRING(m.month_year, 1, 2)
