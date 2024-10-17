@@ -15,7 +15,7 @@ LEFT JOIN {{ ref('g_dim_airbnb_listing') }} l on fm.listing_id = l.listing_id an
 LEFT JOIN {{ ref('g_dim_airbnb_host') }} h on fm.host_id = h.host_id and fm.scraped_date::timestamp >= h.valid_from and fm.scraped_date::timestamp < coalesce(h.valid_to, '9999-12-31'::timestamp)
 LEFT JOIN {{ ref('g_dim_lga_suburb') }} s on lower(h.host_neighbourhood) = lower(s.suburb_name) and fm.scraped_date::timestamp >= s.valid_from and fm.scraped_date::timestamp < coalesce(s.valid_to, '9999-12-31'::timestamp)
 GROUP BY 1,2
-ORDER BY 1,2
+ORDER BY 1,SUBSTRING(TO_CHAR(fm.scraped_date, 'MM/YYYY'),4,4), SUBSTRING(TO_CHAR(fm.scraped_date, 'MM/YYYY'),1,2)
 
 
 
