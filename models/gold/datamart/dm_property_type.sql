@@ -41,7 +41,7 @@ table_active_mom_cnt_distinct_host  as (
 table_active_pcnt_change_cnt_distinct_host  as (
 
     SELECT *,
-    (cnt_listings/LAG(cnt_listings, 1) OVER (PARTITION BY property_type, room_type, accommodates ORDER BY SUBSTRING(month_year, 4, 4), SUBSTRING(month_year, 1, 2)) - 1.0) * 100.0 as pcnt_change
+    (cnt_listings::float/LAG(cnt_listings, 1) OVER (PARTITION BY property_type, room_type, accommodates ORDER BY SUBSTRING(month_year, 4, 4), SUBSTRING(month_year, 1, 2))::float - 1.0) * 100.0 as pcnt_change
     from table_active_mom_cnt_distinct_host
 
 ),
@@ -63,7 +63,7 @@ table_inactive_mom_cnt_distinct_host  as (
 table_inactive_pcnt_change_cnt_distinct_host  as (
 
     SELECT *,
-    (cnt_listings/LAG(cnt_listings, 1) OVER (PARTITION BY property_type, room_type, accommodates ORDER BY SUBSTRING(month_year, 4, 4), SUBSTRING(month_year, 1, 2)) - 1.0) * 100.0 as pcnt_change
+    (cnt_listings::float/LAG(cnt_listings, 1) OVER (PARTITION BY property_type, room_type, accommodates ORDER BY SUBSTRING(month_year, 4, 4), SUBSTRING(month_year, 1, 2))::float - 1.0) * 100.0 as pcnt_change
     from table_inactive_mom_cnt_distinct_host
 
 ),
@@ -74,16 +74,16 @@ main as (
     room_type,
     accommodates,
     month_year,
-    SUM(CASE WHEN has_availability='t' THEN 1 ELSE 0 END)/COUNT(*) as active_listing_rate,
+    SUM(CASE WHEN has_availability='t' THEN 1 ELSE 0 END)/COUNT(*) * 100.0 as active_listing_rate,
     MIN(CASE WHEN has_availability='t' THEN price ELSE null END) as min_active_listing_price,
     MAX(CASE WHEN has_availability='t' THEN price ELSE null END) as max_active_listing_price,
     AVG(CASE WHEN has_availability='t' THEN price ELSE null END) as avg_active_listing_price,
     PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY CASE WHEN has_availability='t' THEN price ELSE null END) as median_active_listing_price,
     COUNT(DISTINCT host_id) as cnt_distinct_host,
-    COUNT(DISTINCT CASE WHEN host_is_superhost='t' THEN host_id ELSE NULL END)/COUNT(DISTINCT host_id) as superhost_rate,
+    COUNT(DISTINCT CASE WHEN host_is_superhost='t' THEN host_id ELSE NULL END)::float/COUNT(DISTINCT host_id)::float as superhost_rate,
     AVG(CASE WHEN has_availability='t' THEN review_scores_rating ELSE null END) as avg_active_listing_review_score_rating,
     SUM(30-availability_30) as number_of_stays,
-    AVG(CASE WHEN has_availability='t' THEN (30-availability_30)*price ELSE NULL END) as est_rev_per_active_listing
+    AVG(CASE WHEN has_availability='t' THEN (30.0-availability_30::float)*price::float ELSE NULL END) as est_rev_per_active_listing
     FROM table_dimensions
     group by 1,2,3,4
 
