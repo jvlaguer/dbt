@@ -1,6 +1,9 @@
-Welcome to your new dbt project!
+Airflow and dbt project!
 
-### Using the starter project
+### Project Description
+Creating a datapipeline in dbt and automating the workflow via Airflow
+
+### Using the project
 
 Try running the following commands:
 - dbt run
